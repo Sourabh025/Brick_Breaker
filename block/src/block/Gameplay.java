@@ -68,18 +68,18 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 		
 		//background_paint  
 		
-		g.setColor(Color.GREEN);
+		g.setColor(Color.BLACK);
 		
 		g.fillRect(1,1,697,592);  // filling screen with black color,using same dimensions that we have defined in Main class for JFrame setbounds 
 		
 		//borders 
 		g.setColor(Color.YELLOW);
 		
-		g.fillRect(0,0,8,592);
+		g.fillRect(0,0,3,592);
 		
-		g.fillRect(0,0,700,8);
+		g.fillRect(0,0,700,3);
 		
-		g.fillRect(695,0,8,592);
+		g.fillRect(695,0,3,592);
 		
 		//pad 
 		ob.setColor(Color.WHITE);
@@ -97,9 +97,18 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 		//score 
 		ob.setColor(Color.BLUE);
 		ob.setFont(new Font("arvil",Font.CENTER_BASELINE,25));
-		ob.drawString("" +playerscore,590,40);
+		ob.drawString("SCORE : " +playerscore,520,40);
 		
-		
+		if(ballposy>600) {   
+			
+			
+			ob.setColor(Color.RED);
+			ob.setFont(new Font("arvil",Font.LAYOUT_LEFT_TO_RIGHT,30));
+			ob.drawString("GAME OVER",260,300);
+			ob.setFont(new Font("arvil",Font.CENTER_BASELINE,30));
+			ob.drawString("Press Enter To Restart",180,340);
+		}
+
 		
 		g.dispose();
 		
@@ -167,15 +176,11 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 		
 		
 		
-		//if(ballposx>600) {   HERE code to stop player run if goes DownSide}
-		
+				
 		
 		if(play) {
 			
-			//origin lies on Upper left corner of the screen (Graph is downWard in direction) 
-			
-			// x increases toward right and y increases downSide 
-			
+		
 			ballposx +=ballxdir;  
 			ballposy +=ballydir;  //here ball moves in triangle form in direction of third side of triangle 
 			
@@ -234,7 +239,27 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 			
 		}
 		
-		
+		if(event.getKeyCode()==KeyEvent.VK_ENTER) {
+			
+			 play=false; 
+			
+			 score= 0;  
+			
+			 playerx=310;  
+			
+			 ballposx=120;  	
+			 ballposy=350;  
+			 ballxdir=-1;  
+			 ballydir=-2;	 
+			
+			 totalBricks=21; 
+			 
+			 delay=5;  
+			
+			 obj=new Map(3,7);
+			 repaint();
+			 
+		}
 		
 		
 	}

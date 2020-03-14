@@ -19,25 +19,29 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 	
 	private boolean play=false; 
 	
-	private int score= 0;  //starting score of player 
+
 	
 	private int playerx=310; //player initial X axis value 
 	
-	private int ballposx=120; //ball initial value on x axis 	
+	private int ballposx=120; //ball initial value on x axis
+	
 	private int ballposy=350; //ball initial value on y axis 
+	
 	private int ballxdir=-1;  //ball direction on x axis
+	
 	private int ballydir=-2;	//ball direction on y axis 
 	
 	private int totalBricks=21;   // 7*3 bricks dimensions 
 	
 	private Timer timer; //adding timer to track time 
+	
 	private int delay=5;  // 5sec delay time 
 	
 	private int playerscore;
 	
 	private Map obj;
 	
-	//all of the methods below are abstract in nature from the KeyListner,ActionListner interfaces
+	
 	
 	
 	
@@ -104,11 +108,25 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 			
 			ob.setColor(Color.RED);
 			ob.setFont(new Font("arvil",Font.LAYOUT_LEFT_TO_RIGHT,30));
-			ob.drawString("GAME OVER",260,300);
+			ob.drawString("GAME OVER",280,300);
 			ob.setFont(new Font("arvil",Font.CENTER_BASELINE,30));
 			ob.drawString("Press Enter To Restart",180,340);
 		}
 
+		if(totalBricks==0) {
+			ballposx=-20;
+			ballposy=-20;
+			ob.setColor(Color.GREEN);
+			ob.setFont(new Font("arvil",Font.LAYOUT_LEFT_TO_RIGHT,30));
+			ob.drawString("Score :"+playerscore,280,300);
+			ob.setFont(new Font("arvil",Font.CENTER_BASELINE,30));
+			ob.drawString("Press Enter To Restart",180,360);
+			
+			
+		}
+		
+		
+		
 		
 		g.dispose();
 		
@@ -241,9 +259,11 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 		
 		if(event.getKeyCode()==KeyEvent.VK_ENTER) {
 			
+			//start game again 
+			
 			 play=false; 
 			
-			 score= 0;  
+			 playerscore= 0;  
 			
 			 playerx=310;  
 			
@@ -257,6 +277,7 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 			 delay=5;  
 			
 			 obj=new Map(3,7);
+			
 			 repaint();
 			 
 		}

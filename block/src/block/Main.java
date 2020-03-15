@@ -26,11 +26,11 @@ public class Main {
 		
 		
 		try {
-			
+			//adding background music to frame
 			AudioInputStream music=AudioSystem.getAudioInputStream(new File("/home/sourabh/Downloads/melodyloops-preview-stranger-runner-8m30s.wav"));
 			Clip clip=AudioSystem.getClip();
-			clip.open(music);  //open is static function so need call with object 
-			clip.start(); //start music 
+			clip.open(music);  //open is not static function so need call with object 
+			clip.start(); 
 			
 		} 
 		

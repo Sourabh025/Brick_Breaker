@@ -1,5 +1,6 @@
 package block;
 
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -16,16 +17,16 @@ import javax.swing.Timer;		//tracks time
 @SuppressWarnings("serial")  // GamePlay class giving error for serialization of class so,Supress warning
 public class Gameplay extends JPanel implements KeyListener,ActionListener{
 	
+	private int life;
+	private int cycle;
 	
 	private boolean play=false; 
 	
-
-	
 	private int playerx=310; //player initial X axis value 
 	
-	private int ballposx=120; //ball initial value on x axis
+	private int ballposx=140; //ball initial value on x axis
 	
-	private int ballposy=350; //ball initial value on y axis 
+	private int ballposy=340; //ball initial value on y axis 
 	
 	private int ballxdir=-1;  //ball direction on x axis
 	
@@ -35,13 +36,13 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 	
 	private Timer timer; //adding timer to track time 
 	
-	private int delay=5;  // 5sec delay time 
+	private int delay;   
 	
 	private int playerscore;
 	
 	private Map obj;
 	
-	
+	private int n;
 	
 	
 	
@@ -51,6 +52,7 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 	//creating constructor so that values initialize itself when GamePlay object called from Main class  
 	
 	public Gameplay(){
+		delay=8;
 		
 		addKeyListener(this); 
 		setFocusable(true);   //component get focus on JPanel
@@ -63,6 +65,15 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 	
 	//---------------------------------------------------------------------------------------------------------
 	
+	
+	
+	
+	public void count() {
+		
+			life=life+1;
+		
+		
+	}
 	
 	//note paint is a inbuilt function of an awt package so no need to call it from a main or constructor 
 	
@@ -89,6 +100,10 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 		ob.setColor(Color.WHITE);
 		ob.fillRect(playerx,550,125,10);  //playerx value is variable because it changes every time with the key entered by the user which is defined in (keyPressed) function below   
 		
+		//bars
+	//	g.fillRect(0,400, 100, 10);
+	//	g.fillRect(600,400, 100, 10);
+		
 		//ball 
 		ob.setColor(Color.WHITE);
 		
@@ -97,33 +112,62 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 		//Brick map 2d creating  
 		obj.draw((Graphics2D)g);
 		
+			
 		
 		//score 
 		ob.setColor(Color.BLUE);
 		ob.setFont(new Font("arvil",Font.CENTER_BASELINE,25));
 		ob.drawString("SCORE : " +playerscore,520,40);
 		
-		if(ballposy>600) {   
+		if(ballposy>=600) {   
 			
+			
+			if(life==1){
+			
+				ob.setColor(Color.GREEN);
+				ob.setFont(new Font("arvil",Font.LAYOUT_LEFT_TO_RIGHT,30));
+				ob.drawString("Total Score : "+playerscore,240,300);
+				ob.setFont(new Font("arvil",Font.CENTER_BASELINE,30));
+				ob.drawString("You lost your all lives ",180,360);
+				
+				
+				
+				
+				
+			}
+			
+			else {
 			
 			ob.setColor(Color.RED);
 			ob.setFont(new Font("arvil",Font.LAYOUT_LEFT_TO_RIGHT,30));
-			ob.drawString("GAME OVER",280,300);
+			ob.drawString("You lost life",280,300);
 			ob.setFont(new Font("arvil",Font.CENTER_BASELINE,30));
-			ob.drawString("Press Enter To Restart",180,340);
+			ob.drawString("Press Enter To Continue",180,340);
+			
+			
+			}
+			
+			
+			
+			
 		}
 
 		if(totalBricks==0) {
+			
 			ballposx=-20;
 			ballposy=-20;
 			ob.setColor(Color.GREEN);
 			ob.setFont(new Font("arvil",Font.LAYOUT_LEFT_TO_RIGHT,30));
-			ob.drawString("Score :"+playerscore,280,300);
+			ob.drawString("Score : "+playerscore,280,300);
 			ob.setFont(new Font("arvil",Font.CENTER_BASELINE,30));
-			ob.drawString("Press Enter To Restart",180,360);
+			ob.drawString("Press Space To Continue",180,360);
 			
 			
-		}
+			
+			}
+		
+		
+		
 		
 		
 		
@@ -136,7 +180,11 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 	
    	@Override
 	public void actionPerformed(ActionEvent event) {
-		timer.start();  //timer used to set speed of the ball
+		
+   		
+   		timer.start();  //timer used to set speed of the ball
+		
+		
 		
 		//detects collision between ball and the pad 
 		if(new Rectangle(ballposx,ballposy,15,15).intersects(playerx,550,125,10)) {
@@ -144,6 +192,23 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 			ballydir=-ballydir;
 			
 		}
+		
+		/* if(new Rectangle(ballposx,ballposy,15,15).intersects(0,400, 100, 10)) {
+			
+			ballydir=-ballydir;
+			
+		}
+
+		if(new Rectangle(ballposx,ballposy,15,15).intersects(600,400, 100, 10)) {
+			
+			ballydir=-ballydir;
+			
+		}
+		*/
+	
+		
+		
+		
 		//detects collision between brick and the ball
 		for(int i=0;i<obj.map.length;i++){
 			
@@ -228,9 +293,9 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 	public void keyPressed(KeyEvent event) {
 		if(event.getKeyCode() == KeyEvent.VK_RIGHT) {
 			
-			if(playerx>=595) {
+			if(playerx>=560) {
 				
-				playerx=595;	// current location= padX+595=695 // total x axis should include pad length(100);
+				playerx=570;	// current location= padX+590=695 // total x axis should include pad length(100);
 			}
 			else {
 				
@@ -257,14 +322,22 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 			
 		}
 		
-		if(event.getKeyCode()==KeyEvent.VK_ENTER) {
+		if(event.getKeyCode()==KeyEvent.VK_ENTER ) {
 			
 			//start game again 
 			
-			 play=false; 
-			
-			 playerscore= 0;  
-			
+			 play=true; 
+			 
+			 life=life+1;
+			 
+			 delay-=2;
+			   
+			if(life==2) {
+				
+				
+				playerscore=0;
+				life=0;
+			}
 			 playerx=310;  
 			
 			 ballposx=120;  	
@@ -273,14 +346,40 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 			 ballydir=-2;	 
 			
 			 totalBricks=21; 
-			 
-			 delay=5;  
 			
 			 obj=new Map(3,7);
 			
 			 repaint();
 			 
+			
+			 
 		}
+		
+		
+		if(event.getKeyCode()==KeyEvent.VK_SPACE ) {
+			
+			 play=true; 
+			 
+			 delay-=2;
+			   
+			 playerx=310;  
+			
+			 ballposx=120;  	
+			 ballposy=350;  
+			 ballxdir=-1;  
+			 ballydir=-2;	 
+			
+			 totalBricks=21; 
+			
+			 obj=new Map(3,7);
+			
+			 repaint();
+			 
+			
+			
+		}
+		
+		
 		
 		
 	}

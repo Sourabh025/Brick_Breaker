@@ -1,4 +1,4 @@
-package block;
+package game;
 
 
 import java.awt.Color;
@@ -15,7 +15,8 @@ import javax.swing.JPanel;    // adding JPanel class from Swing
 import javax.swing.Timer;		//tracks time
 
 @SuppressWarnings("serial")  // GamePlay class giving error for serialization of class so,Supress warning
-public class Gameplay extends JPanel implements KeyListener,ActionListener{
+public class Play extends JPanel implements KeyListener,ActionListener //,Runnable
+{
 	
 	private int life;
 	private int cycle;
@@ -40,7 +41,7 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 	
 	private int playerscore;
 	
-	private Map obj;
+	private Structure obj;
 	
 	private int n;
 	
@@ -51,13 +52,13 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 	
 	//creating constructor so that values initialize itself when GamePlay object called from Main class  
 	
-	public Gameplay(){
-		delay=8;
+	public Play(){
 		
+		delay=8;
 		addKeyListener(this); 
 		setFocusable(true);   //component get focus on JPanel
-		obj=new Map(3,7);
-		
+		obj=new Structure();
+		obj.start();
 		setFocusTraversalKeysEnabled(false);  // tab,shift, ctrl default values are not allowed in our app(we are overriding this method inside keyListener)
 		timer= new Timer(delay,this);   //returns intValue 
 		timer.start();  //start time 
@@ -75,7 +76,7 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 		
 	}
 	
-	//note paint is a inbuilt function of an awt package so no need to call it from a main or constructor 
+	
 	
 	public void paint(Graphics g) {
 		
@@ -85,31 +86,34 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 		
 		g.setColor(Color.BLACK);
 		
-		g.fillRect(1,1,697,592);  // filling screen with black color,using same dimensions that we have defined in Main class for JFrame setbounds 
 		
-		//borders 
+		//Borders
+		//700x600 is window size
+		
+		g.fillRect(1,1,697,592); 
+		g.setColor(Color.BLACK);
+		g.fillRect(0,0,4,592);
+		
+		g.fillRect(0,0,700,4);
+		
+		g.fillRect(697,0,4,600);
+		
 		g.setColor(Color.YELLOW);
-		
-		g.fillRect(0,0,3,592);
-		
-		g.fillRect(0,0,700,3);
-		
-		g.fillRect(695,0,3,592);
-		
+
 		//pad 
 		ob.setColor(Color.WHITE);
 		ob.fillRect(playerx,550,125,10);  //playerx value is variable because it changes every time with the key entered by the user which is defined in (keyPressed) function below   
 		
-		//bars
-	//	g.fillRect(0,400, 100, 10);
-	//	g.fillRect(600,400, 100, 10);
+//		Extra bars
+//		g.fillRect(0,400, 100, 10);
+//		g.fillRect(600,400, 100, 10);
 		
 		//ball 
 		ob.setColor(Color.WHITE);
 		
 		ob.fillOval(ballposx,ballposy,15,15);  //ballposx,ballposy are varible because changes with player action but dimensions of ball are 20x20
 		
-		//Brick map 2d creating  
+		//Brick Structure 2d creating  
 		obj.draw((Graphics2D)g);
 		
 			
@@ -154,8 +158,8 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 
 		if(totalBricks==0) {
 			
-			ballposx=-20;
-			ballposy=-20;
+			ballposx=-25;
+			ballposy=-25;
 			ob.setColor(Color.GREEN);
 			ob.setFont(new Font("arvil",Font.LAYOUT_LEFT_TO_RIGHT,30));
 			ob.drawString("Score : "+playerscore,280,300);
@@ -165,11 +169,6 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 			
 			
 			}
-		
-		
-		
-		
-		
 		
 		
 		g.dispose();
@@ -193,28 +192,28 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 			
 		}
 		
-		/* if(new Rectangle(ballposx,ballposy,15,15).intersects(0,400, 100, 10)) {
-			
-			ballydir=-ballydir;
-			
-		}
-
-		if(new Rectangle(ballposx,ballposy,15,15).intersects(600,400, 100, 10)) {
-			
-			ballydir=-ballydir;
-			
-		}
-		*/
+//		 if(new Rectangle(ballposx,ballposy,15,15).intersects(0,400, 100, 10)) {
+//			
+//			ballydir=-ballydir;
+//			
+//		}
+//
+//		if(new Rectangle(ballposx,ballposy,15,15).intersects(600,400, 100, 10)) {
+//			
+//			ballydir=-ballydir;
+//			
+//		}
+		
 	
 		
 		
 		
 		//detects collision between brick and the ball
-		for(int i=0;i<obj.map.length;i++){
+		for(int i=0;i<obj.Structure.length;i++){
 			
-			for(int j=0;j<obj.map[0].length;j++){
+			for(int j=0;j<obj.Structure[0].length;j++){
 				
-				if(obj.map[i][j]>0) {
+				if(obj.Structure[i][j]>0) {
 					
 					int brickxaxis= j * obj.brickwidth + 80; 
 					int brickyaxis= i* obj.brickheight +50;
@@ -225,7 +224,7 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 					Rectangle ball=new Rectangle(ballposx,ballposy,15,15);
 					
 					if(brick.intersects(ball)){ 
-						obj.map[i][j]=0;
+						obj.Structure[i][j]=0;
 						totalBricks--;
 						playerscore+=10; 
 					
@@ -322,7 +321,7 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 			
 		}
 		
-		if(event.getKeyCode()==KeyEvent.VK_ENTER ) {
+		if(event.getKeyCode()==KeyEvent.VK_ENTER ) {  //Enter to continue play 
 			
 			//start game again 
 			
@@ -337,18 +336,20 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 				
 				playerscore=0;
 				life=0;
+				
 			}
+			
 			 playerx=310;  
 			
-			 ballposx=120;  	
+			 ballposx=180;  	
 			 ballposy=350;  
 			 ballxdir=-1;  
 			 ballydir=-2;	 
 			
 			 totalBricks=21; 
 			
-			 obj=new Map(3,7);
-			
+			 obj=new Structure();
+			 obj.start();
 			 repaint();
 			 
 			
@@ -356,22 +357,25 @@ public class Gameplay extends JPanel implements KeyListener,ActionListener{
 		}
 		
 		
-		if(event.getKeyCode()==KeyEvent.VK_SPACE ) {
+		if(event.getKeyCode()==KeyEvent.VK_SPACE ) {  //space is for continue 
 			
-			 play=true; 
+			
+			play=true; 
 			 
 			 delay-=2;
 			   
 			 playerx=310;  
 			
-			 ballposx=120;  	
+			 ballposx=180;  	
 			 ballposy=350;  
 			 ballxdir=-1;  
 			 ballydir=-2;	 
 			
 			 totalBricks=21; 
 			
-			 obj=new Map(3,7);
+			 obj=new Structure();
+			 
+			 obj.start();
 			
 			 repaint();
 			 

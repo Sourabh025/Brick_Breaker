@@ -126,7 +126,7 @@ public class Logframe extends JFrame implements ActionListener
                         Class.forName("com.mysql.jdbc.Driver");  //load driver class that is mysql-connection(jar file package)  Register JDBC driver
                         
                         
-                        Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "sourabh@2k");    //creating connection c 
+                        Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "sourabh", "sourabh@2k");    //creating connection c 
 
                         System.out.println("Connected");
                         
@@ -240,7 +240,7 @@ public class Logframe extends JFrame implements ActionListener
                     Class.forName("com.mysql.jdbc.Driver");  //load driver class that is mysql-connection(jar file package)  Register JDBC driver
                     
                     
-                    Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "sourabh@2k");    //creating connection c 
+                    Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "sourabh", "sourabh@2k");    //creating connection c 
 
                     System.out.println("Connected");
                     

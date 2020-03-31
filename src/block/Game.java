@@ -1,5 +1,4 @@
-package game;
-
+package block;
 
 
 
@@ -12,9 +11,23 @@ import javax.sound.sampled.Clip;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+
+
 public class Game {
 
-	public static void main(String[] args){
+	public String name;
+	
+	public String get() {
+	
+		
+		return name;
+	}
+	
+	
+	public Game(String s){
+		
+		
+		name=s;
 		
 		Play play=new Play();
 		JFrame obj= new JFrame("Bad Bricks");  // creating an object of JFrame(frame) 

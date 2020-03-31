@@ -1,4 +1,4 @@
-package game;
+package block;
 
 
 import java.awt.Color;
@@ -10,6 +10,10 @@ import java.awt.event.ActionEvent;		// argument for action listener
 import java.awt.event.ActionListener;  // this is for doing action on ball after keyListening 
 import java.awt.event.KeyEvent;			// argument for keyListener methods 
 import java.awt.event.KeyListener;   // this is for detecting arrow key tapped by a user 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import javax.swing.JPanel;    // adding JPanel class from Swing 
 import javax.swing.Timer;		//tracks time
@@ -18,16 +22,17 @@ import javax.swing.Timer;		//tracks time
 public class Play extends JPanel implements KeyListener,ActionListener //,Runnable
 {
 	
-	private int life;
+	private int life;    //each player gets 2 lifes to play 
+	
 	private int cycle;
 	
 	private boolean play=false; 
 	
 	private int playerx=310; //player initial X axis value 
 	
-	private int ballposx=140; //ball initial value on x axis
+	private int ballposx=180; //ball initial value on x axis
 	
-	private int ballposy=340; //ball initial value on y axis 
+	private int ballposy=360; //ball initial value on y axis 
 	
 	private int ballxdir=-1;  //ball direction on x axis
 	
@@ -44,6 +49,12 @@ public class Play extends JPanel implements KeyListener,ActionListener //,Runnab
 	private Structure obj;
 	
 	private int n;
+	
+	public String playername;
+	
+	
+	
+
 	
 	
 	
@@ -125,9 +136,27 @@ public class Play extends JPanel implements KeyListener,ActionListener //,Runnab
 		
 		if(ballposy>=600) {   
 			
-			
 			if(life==1){
-			
+				try { 
+				Class.forName("com.mysql.jdbc.Driver");
+                Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "aa44bd80sr");    //creating connection c 
+                String sqlString = "SELECT playername,player_password from register WHERE playername=? and player_password=?";
+
+        		PreparedStatement login = c.prepareStatement(sqlString);
+        		login.setString(1, name);
+        		
+        		ResultSet rs = login.executeQuery();
+       
+        		System.out.print("Login success");
+       
+				
+				
+				}
+				catch(Exception e) {
+					
+					
+					
+				}
 				ob.setColor(Color.GREEN);
 				ob.setFont(new Font("arvil",Font.LAYOUT_LEFT_TO_RIGHT,30));
 				ob.drawString("Total Score : "+playerscore,240,300);
@@ -221,11 +250,15 @@ public class Play extends JPanel implements KeyListener,ActionListener //,Runnab
 					int brickydim=obj.brickheight;
 				
 					Rectangle brick= new Rectangle(brickxaxis,brickyaxis,brickxdim,brickydim); 
-					Rectangle ball=new Rectangle(ballposx,ballposy,15,15);
+					
+					Rectangle ball=new Rectangle(ballposx,ballposy,10,10);
 					
 					if(brick.intersects(ball)){ 
+						
 						obj.Structure[i][j]=0;
+						
 						totalBricks--;
+						
 						playerscore+=10; 
 					
 						//for right side collision of ball with a brick

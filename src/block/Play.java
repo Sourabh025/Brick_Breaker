@@ -139,7 +139,7 @@ public class Play extends JPanel implements KeyListener,ActionListener //,Runnab
 			if(life==1){
 				try { 
 				Class.forName("com.mysql.jdbc.Driver");
-                Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "aa44bd80sr");    //creating connection c 
+                Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "admin");    //creating connection c 
                 String sqlString = "SELECT playername,player_password from register WHERE playername=? and player_password=?";
 
         		PreparedStatement login = c.prepareStatement(sqlString);
